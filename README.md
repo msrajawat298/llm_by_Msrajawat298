@@ -29,10 +29,10 @@ This is an end to end LLM project based on Google Palm and Langchain. We are bui
 ```bash
   cd llm_by_Msrajawat298
 ```
-3. Install the required dependencies using pip:
+3. Install the required dependencies Means install docker:
 
 ```bash
-  pip install -r requirements.txt
+  docker compose up -d
 ```
 4.Acquire an api key through makersuite.google.com and put it in .env file
 
