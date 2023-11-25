@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  llm-sandbox:
+    image: msrajawat298/llm-environment
+    ports:
+      - "8080:8501"
+    volumes:
+      - .:/app
+    command: /bin/sh -c "streamlit run /app/main.py && tail -f /dev/null"
