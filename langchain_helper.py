@@ -13,12 +13,12 @@ load_dotenv()  # take environment variables from .env (especially google Palm ap
 llm = GooglePalm(google_api_key=os.environ["GOOGLE_API_KEY"], temperature=0.3)
 # # Initialize instructor embeddings using the Hugging Face model
 instructor_embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-large")
-vectordb_file_path = "/app/faiss_index"
+vectordb_file_path = os.environ["VECTOR_DB_FILE_PATH"]
 
 def create_vector_db():
     # Specify the encoding as 'latin-1'
     file_encoding = 'latin-1'
-    loader = CSVLoader(file_path='/app/aboutme.csv', source_column="prompt", encoding=file_encoding)
+    loader = CSVLoader(file_path=os.environ["TRAIN_DATA_FILE_PATH"], source_column="prompt", encoding=file_encoding)
     # Load data from FAQ sheet
     data = loader.load()
     # Create a FAISS instance for vector database from 'data'

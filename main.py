@@ -49,7 +49,14 @@ with st.sidebar:
         # Display the "Create Knowledgeable" button only if the user is an admin
         if st.button("Create Knowledgeable"):
             create_vector_db()
-
+        # Download button for the CSV file
+        st.download_button(
+            label="Download Questions Bank file",
+            data=open("questions.csv", 'rb').read(),
+            key='download_button',
+            file_name='questions.csv',
+            mime='text/csv'
+        )
         # Use st.button for logout
         if st.button("Logout"):
             st.session_state.is_admin = False
