@@ -3,6 +3,7 @@ version: '3'
 services:
   llm-sandbox:
     image: msrajawat298/llm-environment
+    restart: always
     ports:
       - "8080:8501"
     volumes:

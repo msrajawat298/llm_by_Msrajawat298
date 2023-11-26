@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()  # take environment variables from .env (especially openai api key)
 
 # Create Google Palm LLM model
-llm = GooglePalm(google_api_key=os.environ["GOOGLE_API_KEY"], temperature=0.1)
+llm = GooglePalm(google_api_key=os.environ["GOOGLE_API_KEY"], temperature=0.3)
 # # Initialize instructor embeddings using the Hugging Face model
 instructor_embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-large")
 vectordb_file_path = "/app/faiss_index"
@@ -22,8 +22,7 @@ def create_vector_db():
     # Load data from FAQ sheet
     data = loader.load()
     # Create a FAISS instance for vector database from 'data'
-    vectordb = FAISS.from_documents(documents=data,
-                                    embedding=instructor_embeddings)
+    vectordb = FAISS.from_documents(documents=data, embedding=instructor_embeddings)
 
     # Save vector database locally
     vectordb.save_local(vectordb_file_path)
@@ -60,4 +59,4 @@ def get_qa_chain():
 if __name__ == "__main__":
     create_vector_db()
     chain = get_qa_chain()
-    print(chain("Do you have javascript course?"))
+    print(chain("Do you know who is msrajwat298 ?"))
