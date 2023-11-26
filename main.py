@@ -12,7 +12,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",  # You can change the initial state of the sidebar
     menu_items={
         'Report a bug': "https://github.com/msrajawat298/llm_by_Msrajawat298/issues",
-        'About': "# This is a header. This is an *extremely* cool app!"
+        # 'About': "# This is a header. This is an *extremely* cool app!"
     }
 )
 # Include FontAwesome CSS
@@ -58,12 +58,12 @@ with st.sidebar:
     st.header("Follow Me")
     st.markdown(
         """
-        [![LinkedIn](https://img.shields.io/badge/LinkedIn-msrsajwat298-blue?style=social&logo=linkedin)](https://www.linkedin.com/in/msrsajwat298)
+        [![LinkedIn](https://img.shields.io/badge/LinkedIn-msrajawat298-blue?style=social&logo=linkedin)](https://www.linkedin.com/in/msrajawat298)
         """
     )
     st.markdown(
         """
-        [![GitHub](https://img.shields.io/github/followers/msrajawat298?label=Follow&style=social&logo=github)](https://github.com/msrsajwat298)
+        [![GitHub](https://img.shields.io/github/followers/msrajawat298?label=Follow&style=social&logo=github)](https://github.com/msrajawat298)
         """
     )
     st.markdown(

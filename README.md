@@ -22,7 +22,7 @@ This is an end to end LLM project based on Google Palm and Langchain. We are bui
 1.Clone this repository to your local machine using:
 
 ```bash
-  git clone https://github.com/vitabletech/langchain.git
+  git clone https://github.com/msrajawat298/llm_by_Msrajawat298
 ```
 2.Navigate to the project directory:
 
