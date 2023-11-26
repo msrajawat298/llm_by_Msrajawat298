@@ -1,4 +1,5 @@
 import streamlit as st
+import csv
 from langchain_helper import get_qa_chain, create_vector_db
 
 # Hardcoded admin credentials (replace these with your actual admin credentials)
@@ -35,9 +36,21 @@ if st.session_state.is_admin:
 
 question = st.text_input("Question: ")
 
+if "questions" not in st.session_state:
+    st.session_state.questions = []
+
 if question:
     chain = get_qa_chain()
     response = chain(question)
 
     st.header("Answer")
     st.write(response["result"])
+
+    # Append the question to the list in session state
+    st.session_state.questions.append(question)
+    # Clear the input field after processing the question
+    st.session_state.current_question = ""
+    # Save the list of questions to a CSV file
+    with open("questions.csv", "a", newline='') as csv_file:
+        csv_writer = csv.writer(csv_file)
+        csv_writer.writerow([question])
