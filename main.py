@@ -4,6 +4,17 @@ from langchain_helper import get_qa_chain, create_vector_db
 from dotenv import load_dotenv
 load_dotenv()  # take environment variables from .env (especially openai api key)
 
+# Set page configuration
+st.set_page_config(
+    page_title="Know more about Mayank singh kushwah | Msrajawt298",  # Change this to your desired title
+    page_icon="https://raw.githubusercontent.com/msrajawat298/msrajawat298.github.io/main/images/favicon_icon-msrajawat298/favicon.ico",  # Change this to your desired favicon (emoji or URL)
+    layout="wide",  # You can change the layout if needed (wide or centered)
+    initial_sidebar_state="expanded",  # You can change the initial state of the sidebar
+    menu_items={
+        'Report a bug': "https://github.com/msrajawat298/llm_by_Msrajawat298/issues",
+        'About': "# This is a header. This is an *extremely* cool app!"
+    }
+)
 # Include FontAwesome CSS
 st.markdown('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">', unsafe_allow_html=True)
 
@@ -12,7 +23,7 @@ if 'is_admin' not in st.session_state:
     st.session_state.is_admin = False
 
 with st.sidebar:
-      # Add banner image
+    # Add banner image
     st.image("https://raw.githubusercontent.com/msrajawat298/msrajawat298.github.io/main/images/background-images/msrajawat298_bg-min.png")
     st.header("LLM by Msrajawat298")
     st.caption("🚀 A streamlit chatbot powered by Google Plam LLM")
