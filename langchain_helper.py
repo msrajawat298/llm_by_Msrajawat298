@@ -5,6 +5,10 @@ from langchain.embeddings import HuggingFaceInstructEmbeddings
 from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
 import os
+import logging
+
+# Set the logging level to ignore warnings from the sentence_transformers module
+logging.getLogger('sentence_transformers').setLevel(logging.ERROR)
 
 from dotenv import load_dotenv
 load_dotenv()  # take environment variables from .env (especially google Palm api key)
@@ -12,7 +16,7 @@ load_dotenv()  # take environment variables from .env (especially google Palm ap
 # Create Google Palm LLM model
 llm = GooglePalm(google_api_key=os.environ["GOOGLE_API_KEY"], temperature=0.1)
 # # Initialize instructor embeddings using the Hugging Face model
-instructor_embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-large")
+instructor_embeddings = HuggingFaceInstructEmbeddings(model_name="deepset/roberta-large-squad2")
 vectordb_file_path = os.environ["VECTOR_DB_FILE_PATH"]
 
 def create_vector_db():
