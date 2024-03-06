@@ -1,8 +1,10 @@
 import streamlit as st
-import os, csv
+import os
 from langchain_helper import get_qa_chain, create_vector_db
 from dotenv import load_dotenv
-load_dotenv()  # take environment variables from .env (especially openai api key)
+from utils.customFunction import initialize_session_state, append_to_chat_history, save_to_csv, response_generator, display_social_media_icons
+from utils.constant import MAIN_TITLE, CAPTION, SIDEBAR_TTILE, SIDEBAR_CAPTION
+load_dotenv()
 
 # Set page configuration
 st.set_page_config(
@@ -18,19 +20,19 @@ st.set_page_config(
 # Include FontAwesome CSS
 st.markdown('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">', unsafe_allow_html=True)
 
-# Check if 'is_admin' is not in session state, initialize it to False
-if 'is_admin' not in st.session_state:
-    st.session_state.is_admin = False
-
 with st.sidebar:
     # Add banner image
     st.image("https://raw.githubusercontent.com/msrajawat298/msrajawat298.github.io/main/images/background-images/msrajawat298_bg-min.png")
-    st.header("LLM by Msrajawat298")
-    st.caption("🚀 A streamlit chatbot powered by Google Plam LLM")
+    st.header(SIDEBAR_TTILE)
+    st.caption(SIDEBAR_CAPTION)
 
     "[![Google PaLM API Key](https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Google_PaLM_Logo.svg/48px-Google_PaLM_Logo.svg.png) Google PaLM API Key](https://makersuite.google.com/)"
     "[![View the source code ](https://img.shields.io/github/downloads/msrajawat298/llm_by_Msrajawat298/total)](https://github.com/msrajawat298/llm_by_Msrajawat298)"
     "[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/msrajawat298/llm_by_Msrajawat298?quickstart=1)"
+
+    # Check if 'is_admin' is not in session state, initialize it to False
+    if 'is_admin' not in st.session_state:
+        st.session_state.is_admin = False
 
     # Admin Controls section
     st.header("Admin Controls")
@@ -62,62 +64,34 @@ with st.sidebar:
             st.session_state.is_admin = False
             st.success("Logout successful! You are no longer an admin.")
     # Social Media Icons
-    st.header("Follow Me")
-    st.markdown(
-        """
-        [![LinkedIn](https://img.shields.io/badge/LinkedIn-msrajawat298-blue?style=social&logo=linkedin)](https://www.linkedin.com/in/msrajawat298)
-        """
-    )
-    st.markdown(
-        """
-        [![GitHub](https://img.shields.io/github/followers/msrajawat298?label=Follow&style=social&logo=github)](https://github.com/msrajawat298)
-        """
-    )
-    st.markdown(
-        """
-        [![YouTube](https://img.shields.io/youtube/channel/subscribers/UC325gI345WdVzDYMTxIQnqw?style=social&logo=youtube)](https://www.youtube.com/@msrajawat298)
-        """
-    )
-    st.markdown(
-        """
-        [![Stack Overflow](https://img.shields.io/stackexchange/stackoverflow/r/9578353?style=social&logo=stackoverflow)](https://stackoverflow.com/users/9578353/msrajwat298)
-        """
-    )
-    st.markdown(
-        """
-        [![Twitter](https://img.shields.io/twitter/follow/msrsajwat299?style=social&logo=twitter)](https://twitter.com/msrajawat299)
-        """
-    )
-    st.markdown(
-        """
-        [![Blog](https://img.shields.io/badge/Read-YourBlog-red?style=social&logo=rss)](https://blog.vitabletech.in/)
-        """
-    )
-    st.markdown(
-        """
-        [![Facebook](https://img.shields.io/badge/Facebook-msrajawat298-blue?style=social&logo=facebook)](https://www.facebook.com/msrajawat298)
-        """
-    )
+    display_social_media_icons()
 
-st.title("🔎 Know more about Msrajawat298 Q&A  💻")
-st.caption("The great aim of education is not knowledge but action. ― Herbert Spencer")
+st.title(MAIN_TITLE)
+st.caption(CAPTION)
 
-question = st.text_input("Question: ")
-if "questions" not in st.session_state:
-    st.session_state.questions = []
+def main():
 
-if question:
-    chain = get_qa_chain()
-    response = chain(question)
+    for chat in st.session_state.chat_history:
+        with st.chat_message(chat["role"]):
+            st.markdown(chat["content"])
 
-    st.header("Answer")
-    st.write(response["result"])
+    if question := st.chat_input("Question: "):
+        with st.chat_message("user"):
+            st.markdown(question)
 
-    # Append the question to the list in session state
-    st.session_state.questions.append(question)
-    # Clear the input field after processing the question
-    st.session_state.current_question = ""
-    # Save the list of questions to a CSV file
-    with open("questions.csv", "a", newline='') as csv_file:
-        csv_writer = csv.writer(csv_file)
-        csv_writer.writerow([question])
+        chain = get_qa_chain()
+        response = chain(question)
+
+        # Add user message to chat history
+        append_to_chat_history("user", question)
+        append_to_chat_history("Assistant", response["result"])
+        save_to_csv("user : ", question)
+        save_to_csv("Assistant : ", response["result"])
+
+        # Display user message in chat message container
+        with st.chat_message("Assistant"):
+            st.write_stream(response_generator(response["result"]))
+
+if __name__ == "__main__":
+    initialize_session_state()
+    main()
